@@ -30,6 +30,12 @@ class DataStoreManager(private val context: Context) {
         }
     }
 
+    suspend fun setProfileImage(uri: String) {
+        context.dataStore.edit { preferences ->
+            preferences[PROFILE_IMAGE_KEY] = uri
+        }
+    }
+
     suspend fun isClear(){
         context.dataStore.edit {
             it.clear()
@@ -54,11 +60,18 @@ class DataStoreManager(private val context: Context) {
         }
     }
 
+    fun getUserProfileImage(): Flow<String> {
+        return context.dataStore.data.map { preferences ->
+            preferences[PROFILE_IMAGE_KEY] ?: ""
+        }
+    }
+
     companion object {
         private const val DATASTORE_NAME = "user_preferences"
         private val USERNAME_KEY = stringPreferencesKey("username_key")
         private val PASSWORD_KEY = stringPreferencesKey("password_key")
         private val IS_LOGIN_KEY = booleanPreferencesKey("is_login_key")
+        private val PROFILE_IMAGE_KEY = stringPreferencesKey("profile_image_key")
         private val Context.dataStore by preferencesDataStore(
             name = DATASTORE_NAME
         )

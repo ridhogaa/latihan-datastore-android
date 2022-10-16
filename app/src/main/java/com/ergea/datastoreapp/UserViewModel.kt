@@ -26,6 +26,12 @@ class UserViewModel(private val pref: DataStoreManager): ViewModel() {
         }
     }
 
+    fun saveImage(uri: String){
+        viewModelScope.launch {
+            pref.setProfileImage(uri)
+        }
+    }
+
     fun getDataStoreUsername(): LiveData<String> {
         return pref.getUsername().asLiveData()
     }
@@ -36,5 +42,9 @@ class UserViewModel(private val pref: DataStoreManager): ViewModel() {
 
     fun getDataStoreIsLogin(): LiveData<Boolean> {
         return pref.getLogin().asLiveData()
+    }
+
+    fun getImageUser(): LiveData<String>{
+        return pref.getUserProfileImage().asLiveData()
     }
 }
